@@ -1,0 +1,4 @@
+name: ${project.artifactId}
+main: ${package}.bukkit.${project.artifactId}
+version: ${project.version}
+author: ${developer}
