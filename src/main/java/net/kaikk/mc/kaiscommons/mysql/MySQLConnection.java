@@ -20,7 +20,7 @@ public class MySQLConnection<T extends AMySQLQueries> {
 	protected Queue<WeakReference<ConnectionData>> connections;
 	public boolean debug = false;
 
-	public MySQLConnection(DataSource dataSource, Class<T> clazz) throws SQLException {
+	public MySQLConnection(DataSource dataSource, Class<T> clazz) {
 		this.dataSource = dataSource;
 		this.queriesClass = clazz;
 		if (System.getProperty("kaiscommons.mysql.debug", "f").equalsIgnoreCase("true")) {
@@ -37,16 +37,17 @@ public class MySQLConnection<T extends AMySQLQueries> {
 				this.queries().init(this);
 				if (this.debug) {
 					System.out.println("Opened ID: "+Integer.toHexString(cd.hashCode())+" from "+CommonUtils.shortStackTrace(2,0));
-					connections.offer(new WeakReference<>(cd));
 					Iterator<WeakReference<ConnectionData>> it = this.connections.iterator();
 					while (it.hasNext()) {
 						WeakReference<ConnectionData> wcd = it.next();
-						if (wcd.get() == null) {
+						if (wcd.get() == null || wcd.get().connection.isClosed()) {
 							it.remove();
 						} else if (wcd.get().getLastUsedTime() + 30000 < System.currentTimeMillis()) {
 							System.err.println("Connection ID "+Integer.toHexString(wcd.get().hashCode())+" is unused for more than 30 seconds. Potential memory leak. Stack trace: "+wcd.get().stackTrace);
+							it.remove();
 						}
 					}
+					connections.offer(new WeakReference<>(cd));
 				}
 			} catch (InstantiationException | IllegalAccessException | SecurityException e) {
 				throw new IllegalArgumentException(e);
@@ -139,6 +140,11 @@ public class MySQLConnection<T extends AMySQLQueries> {
 					connection.close();
 				}
 			} catch (Throwable e) { }
+		}
+
+		@Override
+		public boolean equals(Object o) {
+			return this == o;
 		}
 	}
 }
