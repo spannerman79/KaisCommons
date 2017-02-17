@@ -1,5 +1,6 @@
 package net.kaikk.mc.kaiscommons;
 
+import java.lang.reflect.ParameterizedType;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -166,10 +167,17 @@ public class CommonUtils {
 		}
 	}
 
-
 	public static String humanReadableByteCount(long v) {
 	    if (v < 1024) return v + " B";
 	    int z = (63 - Long.numberOfLeadingZeros(v)) / 10;
 	    return String.format("%.1f %sB", (double)v / (1L << (z*10)), " KMGTPE".charAt(z)+"i");
+	}
+	
+	public static Class<?> getParameterizedType(Class<? extends Object> clazz) {
+		return ((Class<?>) ((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[0]);
+	}
+	
+	public static Class<?> getParameterizedType(Object obj) {
+		return getParameterizedType(obj.getClass());
 	}
 }
