@@ -14,8 +14,8 @@ import net.kaikk.mc.kaiscommons.CommonUtils;
  * */
 public class MySQLConnectionPool<T extends AMySQLQueries> extends MySQLConnection<T> {
 	protected final Queue<ConnectionData> pool = new ConcurrentLinkedQueue<>();
-
-	public MySQLConnectionPool(DataSource dataSource, Class<T> clazz) throws SQLException {
+	
+	public MySQLConnectionPool(DataSource dataSource, Class<T> clazz) {
 		super(dataSource, clazz);
 	}
 
