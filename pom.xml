@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.kaikk.mc</groupId>
 	<artifactId>KaisCommons</artifactId>
-	<version>0.9</version>
+	<version>0.9.1</version>
 	<licenses>
 		<license>
 			<name>GPL v3 License</name>
@@ -55,6 +55,10 @@
 			<id>sponge</id>
 			<url>http://repo.spongepowered.org/maven</url>
 		</repository>
+		<repository>
+			<id>bungeecord-repo</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
@@ -74,6 +78,13 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<version>5.1.39</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.md-5</groupId>
+			<artifactId>bungeecord-api</artifactId>
+			<version>1.8-SNAPSHOT</version>
+			<type>jar</type>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
