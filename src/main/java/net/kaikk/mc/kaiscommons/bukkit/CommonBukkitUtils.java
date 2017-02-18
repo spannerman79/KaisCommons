@@ -18,7 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.BlockIterator;
 
 public class CommonBukkitUtils {
-	public static void copyAsset(JavaPlugin instance, String assetName) {
+	public static File copyAsset(JavaPlugin instance, String assetName) {
 		File file = new File(instance.getDataFolder(), assetName);
 		file.getParentFile().mkdirs();
 		if (!file.exists()) {
@@ -30,6 +30,7 @@ public class CommonBukkitUtils {
 				throw new RuntimeException(e);
 			}
 		}
+		return file;
 	}
 	
 	public static InputStream getAsset(JavaPlugin instance, String assetName) {
