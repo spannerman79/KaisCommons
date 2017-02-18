@@ -14,9 +14,9 @@ import javax.sql.DataSource;
 import net.kaikk.mc.kaiscommons.CommonUtils;
 
 public class MySQLConnection<T extends AMySQLQueries> {
-	protected DataSource dataSource;
-	protected ThreadLocal<ConnectionData> connData = new ThreadLocal<ConnectionData>();
-	protected Class<T> queriesClass;
+	protected final DataSource dataSource;
+	protected final ThreadLocal<ConnectionData> connData = new ThreadLocal<ConnectionData>();
+	protected final Class<T> queriesClass;
 	protected Queue<WeakReference<ConnectionData>> connections;
 	public boolean debug = false;
 
