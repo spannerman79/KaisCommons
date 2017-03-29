@@ -59,6 +59,6 @@ public class CommonSpongeUtils {
 	}
 	
 	public static void spawnItem(ItemStack itemStack, Location<World> location) {
-		spawnItem(itemStack, location);
+		spawnItem(itemStack.createSnapshot(), location);
 	}
 }
