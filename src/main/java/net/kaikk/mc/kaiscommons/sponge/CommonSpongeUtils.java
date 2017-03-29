@@ -13,6 +13,7 @@ import org.spongepowered.api.event.cause.entity.spawn.EntitySpawnCause;
 import org.spongepowered.api.event.cause.entity.spawn.SpawnTypes;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.profile.GameProfile;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
@@ -20,9 +21,17 @@ import org.spongepowered.api.world.extent.Extent;
 
 public class CommonSpongeUtils {
 	public static String getNameFromId(UUID uuid) {
-		Optional<GameProfile> profile = Sponge.getServer().getGameProfileManager().getCache().getOrLookupById(uuid);
-		if (profile.isPresent() && profile.get().getName().isPresent()) {
-			return profile.get().getName().get();
+		if (uuid == null) {
+			return "N/A";
+		}
+		try {
+			Optional<GameProfile> profile = Sponge.getServer().getGameProfileManager().getCache().getOrLookupById(uuid);
+			if (profile.isPresent() && profile.get().getName().isPresent()) {
+				return profile.get().getName().get();
+			}
+		} catch (Throwable e) {
+			System.err.println("Error while requesting name for UUID: "+uuid);
+			e.printStackTrace();
 		}
 
 		return "N/A";
@@ -37,13 +46,19 @@ public class CommonSpongeUtils {
 	}
 
 	public static void spawnItem(ItemType itemType, int quantity, Location<World> location) {
-		ItemStack newstack = ItemStack.builder().itemType(itemType).quantity(quantity).build();
-
+		spawnItem(ItemStack.builder().itemType(itemType).quantity(quantity).build(), location);
+	}
+	
+	public static void spawnItem(ItemStackSnapshot itemStack, Location<World> location) {
 		Extent extent = location.getExtent();
 		Entity optional = extent.createEntity(EntityTypes.ITEM, location.getPosition());
-		optional.offer(Keys.REPRESENTED_ITEM, newstack.createSnapshot());
+		optional.offer(Keys.REPRESENTED_ITEM, itemStack);
 		optional.offer(Keys.PICKUP_DELAY, 40);
 		extent.spawnEntity(optional, Cause
 				.source(EntitySpawnCause.builder().entity(optional).type(SpawnTypes.DROPPED_ITEM).build()).build());
+	}
+	
+	public static void spawnItem(ItemStack itemStack, Location<World> location) {
+		spawnItem(itemStack, location);
 	}
 }
