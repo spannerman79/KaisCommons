@@ -1,6 +1,8 @@
 package net.kaikk.mc.kaiscommons;
 
 import java.lang.reflect.ParameterizedType;
+import java.net.Inet6Address;
+import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -179,5 +181,30 @@ public class CommonUtils {
 	
 	public static Class<?> getParameterizedType(Object obj) {
 		return getParameterizedType(obj.getClass());
+	}
+	
+	/**
+	 * Converts IPv4 address to an IPv6 "IPv4-mapped" byte array.
+	 * If an IPv6 is provided, it'll return the byte array for the IPv6
+	 * 
+	 * This is used to store mixed IPv4 and IPv6 on a 16 bytes long BINARY SQL column 
+	 * 
+	 * @param address an IPv4 or IPv6 address
+	 * @return a 16 bytes long IPv4-mapped array, or the byte array for the provided IPv6
+	 */
+	public static byte[] ipToMappedIPv4(final InetAddress address) {
+		if (address instanceof Inet6Address) {
+			return address.getAddress();
+		}
+		
+		final byte[] arr = new byte[16];
+		final byte[] ipv4 = address.getAddress();
+		arr[15] = ipv4[3];
+		arr[14] = ipv4[2];
+		arr[13] = ipv4[1];
+		arr[12] = ipv4[0];
+		arr[11] = -1; // 0xFF
+		arr[10] = -1; // 0xFF
+		return arr;
 	}
 }
