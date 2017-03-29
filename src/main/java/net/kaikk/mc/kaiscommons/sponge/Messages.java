@@ -43,7 +43,7 @@ public class Messages implements IMessages {
 	public Text getText(String id) {
 		String m = messages.get(id);
 		if (m == null) {
-			return Text.of(TextColors.RED, "Couldn't find the message id \""+id+"\"!");
+			return Text.of(TextColors.RED, "Couldn't find the message id \"", id, "\"!");
 		}
 
 		return TextSerializers.FORMATTING_CODE.deserialize(m);
@@ -52,7 +52,7 @@ public class Messages implements IMessages {
 	public Text getText(String id, String... replacements) {
 		String m = messages.get(id);
 		if (m == null) {
-			return Text.of(TextColors.RED, "Couldn't find the message id \""+id+"\"!");
+			return Text.of(TextColors.RED, "Couldn't find the message id \"", id, "\"!");
 		}
 		for (int i = 0; i<replacements.length; i++) {
 			m = m.replace("%"+replacements[i], replacements[++i]);
@@ -61,14 +61,22 @@ public class Messages implements IMessages {
 		return TextSerializers.FORMATTING_CODE.deserialize(m);
 
 	}
+	
+	public String getFormattedString(String id) {
+		return TextSerializers.FORMATTING_CODE.serialize(this.getText(id));
+	}
 
-	@SuppressWarnings("deprecation")
+	public String getFormattedString(String id, String... replacements) {
+		return TextSerializers.FORMATTING_CODE.serialize(this.getText(id, replacements));
+	}
+
+	@Deprecated
 	@Override
 	public String get(String id) {
 		return TextSerializers.LEGACY_FORMATTING_CODE.serialize(this.getText(id));
 	}
 
-	@SuppressWarnings("deprecation")
+	@Deprecated
 	@Override
 	public String get(String id, String... replacements) {
 		return TextSerializers.LEGACY_FORMATTING_CODE.serialize(this.getText(id, replacements));
