@@ -43,7 +43,7 @@ public class MySQLConnection<T extends AMySQLQueries> {
 						if (wcd.get() == null || wcd.get().connection.isClosed()) {
 							it.remove();
 						} else if (wcd.get().getLastUsedTime() + 30000 < System.currentTimeMillis()) {
-							System.err.println("Connection ID "+Integer.toHexString(wcd.get().hashCode())+" is unused for more than 30 seconds. Potential memory leak. Stack trace: "+wcd.get().stackTrace);
+							System.err.println("Connection ID "+Integer.toHexString(wcd.get().hashCode())+" is unused for more than 30 seconds. Potential connection leak. Stack trace: "+wcd.get().stackTrace);
 							it.remove();
 						}
 					}
@@ -136,7 +136,7 @@ public class MySQLConnection<T extends AMySQLQueries> {
 		protected void finalize() throws Throwable {
 			try {
 				if (!connection.isClosed()) {
-					System.err.println("Finalizing ID "+Integer.toHexString(this.hashCode())+". Potential memory leak. Stack trace: "+this.stackTrace);
+					System.err.println("Finalizing ID "+Integer.toHexString(this.hashCode())+". Potential connection leak. Stack trace: "+this.stackTrace);
 					connection.close();
 				}
 			} catch (Throwable e) { }
