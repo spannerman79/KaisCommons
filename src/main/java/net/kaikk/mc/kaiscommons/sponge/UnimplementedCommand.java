@@ -11,7 +11,7 @@ import org.spongepowered.api.text.format.TextColors;
 public class UnimplementedCommand implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		src.sendMessage(Text.of(TextColors.RED, "This command has not being implemented yet"));
+		src.sendMessage(Text.of(TextColors.RED, "This command has not been implemented yet"));
 		return CommandResult.success();
 	}
 
