@@ -44,6 +44,7 @@ public class MySQLConnection<T extends AMySQLQueries> {
 							it.remove();
 						} else if (wcd.get().getLastUsedTime() + 30000 < System.currentTimeMillis()) {
 							System.err.println("Connection ID "+Integer.toHexString(wcd.get().hashCode())+" is unused for more than 30 seconds. Potential connection leak. Stack trace: "+wcd.get().stackTrace);
+							wcd.get().connection.close();
 							it.remove();
 						}
 					}
